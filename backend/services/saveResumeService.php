@@ -4,7 +4,7 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: user_login.php");
     exit();
 }
-require 'db.php';
+include ("../config/db.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -35,7 +35,7 @@ $end_edu      = $_POST['end_at'];
 $gpas         = $_POST['gpa'];
 
 // Insert each education row
-$eduStmt = $conn->prepare("INSERT INTO education_details (institution_name, started_at, end_at, gpa) VALUES (?, ?, ?, ?)");
+$eduStmt = $conn->prepare("INSERT INTO education_detail (institution_name, started_at, end_at, gpa) VALUES (?, ?, ?, ?)");
 for ($i = 0; $i < count($institutions); $i++) {
     $eduStmt->bind_param("ssss", $institutions[$i], $start_edu[$i], $end_edu[$i], $gpas[$i]);
     if (!$eduStmt->execute()) {
@@ -52,7 +52,7 @@ $start_exp     = $_POST['start_date'];
 $end_exp       = $_POST['end_date'];
 
 // Insert each experience row
-$expStmt = $conn->prepare("INSERT INTO experience_details (company_name, position, responsibility, start_date, end_date) VALUES (?, ?, ?, ?, ?)");
+$expStmt = $conn->prepare("INSERT INTO experience_detail (company_name, position, responsibility, start_date, end_date) VALUES (?, ?, ?, ?, ?)");
 for ($i = 0; $i < count($companies); $i++) {
     $expStmt->bind_param("sssss", $companies[$i], $positions[$i], $responsibilty[$i], $start_exp[$i], $end_exp[$i]);
     if (!$expStmt->execute()) {
@@ -62,6 +62,6 @@ for ($i = 0; $i < count($companies); $i++) {
 $expStmt->close();
 
 $conn->close();
-header("Location: resumes.php?success=1");
+header("Location: ../../frontend/pages/dashboard.php?success=1");
 exit();
 ?>
